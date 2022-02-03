@@ -5,8 +5,6 @@
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 
-#include <ros/ros.h>
-
 namespace hdl_global_localization {
 
 DiscreteTransformation::DiscreteTransformation() {
@@ -97,7 +95,7 @@ boost::optional<Eigen::Isometry2f> BBSLocalization::localize(const BBSLocalizati
 
   auto trans_queue = create_init_transset(scan_points);
 
-  ROS_INFO_STREAM("Branch-and-Bound");
+  // ROS_INFO_STREAM("Branch-and-Bound");
   while (!trans_queue.empty()) {
     // std::cout << trans_queue.size() << std::endl;
 
@@ -137,10 +135,10 @@ std::priority_queue<DiscreteTransformation> BBSLocalization::create_init_transse
   std::pair<int, int> ty_range(std::floor(params.min_ty / trans_res), std::ceil(params.max_ty / trans_res));
   std::pair<int, int> theta_range(std::floor(params.min_theta / theta_resolution), std::ceil(params.max_theta / theta_resolution));
 
-  ROS_INFO_STREAM("Resolution trans:" << trans_res << " theta:" << theta_resolution);
-  ROS_INFO_STREAM("TransX range:" << tx_range.first << " " << tx_range.second);
-  ROS_INFO_STREAM("TransY range:" << ty_range.first << " " << ty_range.second);
-  ROS_INFO_STREAM("Theta  range:" << theta_range.first << " " << theta_range.second);
+  // ROS_INFO_STREAM("Resolution trans:" << trans_res << " theta:" << theta_resolution);
+  // ROS_INFO_STREAM("TransX range:" << tx_range.first << " " << tx_range.second);
+  // ROS_INFO_STREAM("TransY range:" << ty_range.first << " " << ty_range.second);
+  // ROS_INFO_STREAM("Theta  range:" << theta_range.first << " " << theta_range.second);
 
   std::vector<DiscreteTransformation> transset;
   transset.reserve((tx_range.second - tx_range.first) * (ty_range.second - ty_range.first) * (theta_range.second - theta_range.first));
@@ -153,7 +151,7 @@ std::priority_queue<DiscreteTransformation> BBSLocalization::create_init_transse
     }
   }
 
-  ROS_INFO_STREAM("Initial transformation set size:" << transset.size());
+  // ROS_INFO_STREAM("Initial transformation set size:" << transset.size());
 
 #pragma omp parallel for
   for (int i = 0; i < transset.size(); i++) {
